@@ -5,3 +5,5 @@ langchain-groq
 langchain-community
 langchain-openai
 streamlit
+transformers
+streamlit_chat
