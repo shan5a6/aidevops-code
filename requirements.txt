@@ -7,3 +7,15 @@ langchain-openai
 streamlit
 transformers
 streamlit_chat
+sentence-transformers
+langchain_huggingface
+faiss-gpu
+fastapi
+uvicorn
+numexpr
+googlesearch-python
+
+#if faiss-gpu files to work then do the below 
+
+# sudo apt-get update && sudo apt-get install -y cmake build-essential
+# pip install git+https://github.com/facebookresearch/faiss.git
