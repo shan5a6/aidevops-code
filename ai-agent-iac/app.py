@@ -1,28 +1,68 @@
+import streamlit as st
+import subprocess
 import os
+
+from agent import terraform , groq, format, dataparsing 
+
+# Page Config
+st.set_page_config(page_title="Terraform Agent", layout="centered")
+st.title("🌍 Terraform Agent")
+
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
-from agent import groq
+# ========== User Prompt ==========
+user_prompt = st.text_area("Enter your prompt:", placeholder="Type your Terraform request here...")
 
-# ### 1. Calling groq and printing response
-# print(groq.calling_groq("generate terraform code for adding user in aws. GIVE ME ONLY HCL CODE"))
+# ========== Generate Terraform Code ==========
+if st.button("Generate Terraform code"):
+    st.subheader("Generated Terraform Code")
+    # Calling LLM to fetch data 
+    response = groq.calling_groq(user_prompt)
+    # Printing collected data on screen 
+    st.code(response, language="hcl")
+    # Parsing data to multiple files 
+    dataparsing.contentparsing(response)
 
-### 2. Calling with right prompt and showing audiance about file seggregation
-prompt = """
-Role: You are a terraform expert
-Context: Expecting ONLY HCL CODE NOTHING ELSE
-Requirement: Need your help to generate the terraform code 
-Output: Can you please generate terraform code for creating one vpc with one ec2 server in public subnet
-Ensure you are generating it in main.tf,variables.tf and output.tf files properly and ensure you are naming them as 
-Example:**main.tf**,**variables.tf**,**output.tf**
-NOTE: Don't include ``` in the output. 
-"""
+# ========== Terraform Operations ==========
+st.subheader("Terraform Operations")
 
-response = groq.calling_groq(prompt)
+col1, col2, col3 = st.columns(3)
 
+# Keep track of which action is clicked
+action = None
 
-### 3. Parsing the data and storing data to files. Teach them how to get it done
-from agent import dataparsing
-print(dataparsing.contentparsing(response))
+with col1:
+    if st.button("Terraform Plan"):
+        action = "plan"
+
+with col2:
+    if st.button("Terraform Apply"):
+        action = "apply"
+
+with col3:
+    if st.button("Terraform Destroy"):
+        action = "destroy"
+
+# --- Show output full width ---
+if action:
+    if action == "plan":
+        result = terraform.run_terraform_command("plan")
+        st.subheader("Plan Output")
+        st.code(format.clean_output(result), language="bash")
+
+    elif action == "apply":
+        result = terraform.run_terraform_command("apply")
+        st.subheader("Apply Output")
+        st.code(format.clean_output(result), language="bash")
+
+    elif action == "destroy":
+        result = terraform.run_terraform_command("destroy")
+        st.subheader("Destroy Output")
+        st.code(format.clean_output(result), language="bash")
+
+# ========== Show User Inputs ==========
+if user_prompt:
+    st.subheader("📌 Captured Inputs")
+    st.write("**User Prompt:**", user_prompt)

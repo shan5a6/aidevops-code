@@ -2,3 +2,5 @@
 .env
 faiss
 ai-agent-iac/.env 
+**/agent/__pycache__/**
+**/**/.terraform*

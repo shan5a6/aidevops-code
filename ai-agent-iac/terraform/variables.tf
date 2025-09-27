@@ -1,34 +1,14 @@
 variable "region" {
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-1"
 }
 
-variable "vpc_cidr" {
+variable "ami_id" {
   type        = string
-  default     = "10.0.0.0/16"
-}
-
-variable "public_subnet_cidr" {
-  type        = string
-  default     = "10.0.1.0/24"
-}
-
-variable "availability_zone" {
-  type        = string
-  default     = "us-west-2a"
-}
-
-variable "ami" {
-  type        = string
-  default     = "ami-0c94855ba95c71c99"
-}
-
-variable "instance_type" {
-  type        = string
-  default     = "t2.micro"
+  default     = "ami-0af11aec6e4f10de7"
 }
 
 variable "key_name" {
   type        = string
-  default     = "example-key"
+  default     = "MCB4KEY"
 }
