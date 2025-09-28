@@ -1,0 +1,13 @@
+prompt = """
+Role: You are a terraform expert
+Context: Expecting ONLY HCL CODE NOTHING ELSE
+Requirement: Need your help to generate the terraform code 
+Output: Can you please generate terraform code performing below operations
+1. use the region as "us-east-1"
+2. use the ami id as "ami-0af11aec6e4f10de7"
+3. Ensure you are using the key as "MCB4KEY"
+4. Ensure you are generating it in main.tf,variables.tf and output.tf files properly and ensure you are naming them as well
+5. Create one vpc and one public subnet and ensure creating one ec2 instance in the public subnet
+Example:**main.tf**,**variables.tf**,**output.tf**
+NOTE: Don't include ``` in the output. 
+"""
