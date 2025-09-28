@@ -9,7 +9,6 @@ st.set_page_config(page_title="Terraform Agent", layout="centered")
 st.title("🌍 Terraform Agent")
 
 from dotenv import load_dotenv
-
 load_dotenv()
 
 # ========== User Prompt ==========
@@ -27,6 +26,11 @@ if st.button("Generate Terraform code"):
 
 # ========== Terraform Operations ==========
 st.subheader("Terraform Operations")
+
+# --- Values file selection ---
+terraform_dir = os.path.join(os.getcwd(), "terraform")
+available_tfvars = [f for f in os.listdir(terraform_dir) if f.endswith(".tfvars")] if os.path.exists(terraform_dir) else []
+selected_tfvars = st.multiselect("Select values file(s):", available_tfvars)
 
 col1, col2, col3, col4, col5, col6 = st.columns(6)
 
@@ -59,19 +63,9 @@ with col6:
 
 # --- Show output full width ---
 if action:
-    if action == "plan":
-        result = terraform.run_terraform_command("plan")
-        st.subheader("Plan Output")
-        st.code(format.clean_output(result), language="bash")
-
-    elif action == "apply":
-        result = terraform.run_terraform_command("apply")
-        st.subheader("Apply Output")
-        st.code(format.clean_output(result), language="bash")
-
-    elif action == "destroy":
-        result = terraform.run_terraform_command("destroy")
-        st.subheader("Destroy Output")
+    if action in ["plan", "apply", "destroy"]:
+        result = terraform.run_terraform_command(action, values_files=selected_tfvars)
+        st.subheader(f"{action.capitalize()} Output")
         st.code(format.clean_output(result), language="bash")
 
     elif action == "validate":
