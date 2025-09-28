@@ -1,0 +1,90 @@
+## Working Prompt
+
+Generate ONLY raw Terraform HCL code for the following **two-tier architecture**:
+
+✅ Use separate **modules** for **vpc**, **ec2**, and **rds**.  
+✅ Each module must include:
+  - `main.tf`
+  - `variables.tf`
+  - `outputs.tf`
+
+✅ Also generate the **root module** with:
+  - `main.tf` → calls all modules properly using relative `source` paths
+  - `variables.tf` → declares any shared or input variables
+  - `terraform.tf` → Terraform backend or provider block (basic)
+  - `dev.tfvars` → example values for dev environment
+
+✅ Split all code blocks into clear **sections** using **ONLY this format** (no extra text!):
+
+modules/vpc/main.tf
+<YOUR VPC ALONG WITH SUBNETS,SECURITY GROUP CODE HERE>
+modules/vpc/variables.tf
+<YOUR VPC VARIABLES HERE>
+modules/vpc/outputs.tf
+<YOUR VPC OUTPUTS HERE>
+✅ Also ensure you are exposing the subnet id to the output so that ec2 module can consume it as variable
+✅ Also ensure you are exposing the security group id to the output
+modules/ec2/main.tf
+<YOUR EC2 CODE HERE>
+✅ Also ensure that the EC2 instance is launched in the subnet created by the VPC module and a variable should be given so that it can be called from root module
+modules/ec2/variables.tf
+<YOUR EC2 VARIABLES HERE>
+modules/ec2/outputs.tf
+<YOUR EC2 OUTPUTS HERE>
+modules/rds/main.tf
+<YOUR RDS CODE HERE>
+
+modules/rds/variables.tf
+<YOUR RDS VARIABLES HERE>
+modules/rds/outputs.tf
+<YOUR RDS OUTPUTS HERE>
+
+main.tf
+<ROOT MAIN CODE HERE>
+✅ This should include valid calls for all the modules like rds,vpc,ec2
+✅ Make sure that the output of vpc subnet id should be passed as input to the ec2 module so that it create the ec2 
+✅ Also don't forget to consume the vpc security group id and then pass it as value to ec2 and rds modules
+✅ Ensure everything is passed as the variables so that we can reuse the code for multiple environments
+variables.tf
+<ROOT VARIABLES HERE>
+terraform.tf
+<ROOT TERRAFORM BLOCK HERE>
+dev.tfvars
+<EXAMPLE TFVARS HERE>
+terraform.tf 
+<EXAMPLE TERRAFORM AWS PROVIDER DETAILS HERE>
+EXAMPLE LIKE:
+    terraform {
+    required_providers {
+        aws = {
+        source = "hashicorp/aws"
+        version = "6.0.0"
+        }
+    }
+    }
+
+    provider "aws" {
+    # Configuration options
+    }
+
+❌ Do NOT add any explanations.
+❌ Do NOT add “Note: …”
+❌ Do NOT add “Here is…”
+❌ Do NOT wrap the entire output in a single code fence.
+❌ Do NOT add any markdown explanations.
+❌ Do NOT add any extra text before, between or after the code sections.
+❌ Do NOT repeat the same code in multiple files.
+❌ Do NOT include access keys or sensitive data. in terraform.tf file 
+❌ No need to mention file() for the source in the modules instead mention example like source = "./module/vpc"
+❌ No need to add ```
+
+Only output the code split by filenames exactly as above.
+
+✅ Use a valid AWS provider example. Include:
+- A vpc with proper details like cidr,name, and tags with its own variables
+- One EC2 instance in the subnet
+- One RDS instance in the VPC
+    Ensure you using identifier instead of name for rds module to avoid issues
+- Make sure that you are generating a clean and valid HCL code.
+
+The output must be clean Terraform HCL, ready to parse line-by-line.
