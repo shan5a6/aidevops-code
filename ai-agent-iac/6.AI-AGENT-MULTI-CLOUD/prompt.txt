@@ -1,0 +1,43 @@
+You are an expert Terraform assistant.
+
+Generate Terraform code for a simple 3-cloud setup:
+- Cloud providers: AWS, Azure, GCP
+- Each cloud should have:
+   - A VPC or VNet with CIDR block 10.0.0.0/16
+   - A subnet 10.0.1.0/24 inside it
+   - An Ubuntu 22.04 VM in the subnet
+   - Security group or firewall allowing SSH (port 22)
+   - All resources tagged Name = "DemoProject"
+
+✅ Organize your output in this format:
+1. For each cloud, start with a Markdown header:
+   `### AWS: modules/aws/`  
+   `### Azure: modules/azure/`  
+   `### GCP: modules/gcp/`
+2. Generate code for the each cloud in the respective module directory as per the below files:
+   - `modules/aws/main.tf`
+   - `modules/aws/providers.tf`
+   - `modules/azure/main.tf`
+   - `modules/azure/providers.tf`
+   - `modules/gcp/main.tf`
+   - `modules/gcp/providers.tf`
+3. Ensure all resources are tagged with `Name = "DemoProject"`.
+4. Make sure you are creating providers.tf file for all providers with proper content like 
+modules/aws/providers.tf:
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "6.0.0"
+    }
+  }
+}
+
+provider "aws" {
+  # Configuration options
+}
+modules/azure/providers.tf:
+<YOUR AZURE PROVIDERS CODE HERE>
+modules/gcp/providers.tf:
+<YOUR AZURE PROVIDERS CODE HERE>
+
